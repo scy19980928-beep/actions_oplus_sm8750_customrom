@@ -60,7 +60,6 @@ on:
         default: "On"
       UNICODE_BYPASS:
         description: "🚀 Unicode zero-width bypass fix patch (Not recommended for higher kernel versions; it is suggested to use https://t.me/real5ec1cff/271 for a painless fix)"
-          https://t.me/real5ec1cff/271 无痛修复)
         required: true
         type: choice
         options:

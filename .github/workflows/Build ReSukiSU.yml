@@ -1,5 +1,5 @@
 ---
-name: Build ReSukiSU
+name: Build KernelSU Next
 env:
   TZ: Asia/Shanghai
   ANDROID_VERSION: android15
@@ -16,16 +16,8 @@ on:
           - "On"
           - "Off"
         default: "Off"
-      KPM:
-        description: "🧩 KPM Support"
-        required: true
-        type: choice
-        options:
-          - "On"
-          - "Off"
-        default: "On"
-      resukisu_multimanager:
-        description: "👥 Multimanager support（weishu KSU、5ec1cff KSU、rsuntk KSU、KowSU、MamboSU、KernelSU NEXT、WildKSU）"
+      ksunext_multimanager:
+        description: 👥 Multimanager support（weishu KSU、5ec1cff KSU、rsuntk KSU、SukiSU Ultra, ReSukiSU, kowsu, MamboSU, WildKSU）
         required: true
         type: choice
         options:
@@ -73,7 +65,7 @@ on:
         options:
           - "On"
           - "Off"
-        default: Off
+        default: "Off"
       kernel_suffix:
         description: "📝 Kernel suffix (Leave empty to use the default; do not add a hyphen at the beginning, and do not include spaces or other reserved characters that may affect command execution)"
         required: false
@@ -103,14 +95,14 @@ jobs:
           remove-android: "true"
           remove-haskell: "true"
           remove-codeql: "true"
-          
+
       - name: ⚙️ Setup Cache Env | 设置缓存环境
         run: |
           echo "🔧 正在设置机型隔离缓存目录..."
-          echo "CCACHE_DIR=$HOME/.ccache_ReSukiSU" >> $GITHUB_ENV
-          mkdir -p "$HOME/.ccache_ReSukiSU"
+          echo "CCACHE_DIR=$HOME/.ccache_KSUNext" >> $GITHUB_ENV
+          mkdir -p "$HOME/.ccache_KSUNext"
 
-          echo "✅ 缓存目录已设置: $HOME/.ccache_ReSukiSU"
+          echo "✅ 缓存目录已设置: $HOME/.ccache_KSUNext"
           
       - name: 🔐 Configure Git | 配置Git账户
         run: |
@@ -132,22 +124,22 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ runner.os }}-${{ github.ref }}-ReSukiSU-SUSFS
+          key: ccache-${{ runner.os }}-${{ github.ref }}-KSUNext-SUSFS
           restore-keys: >
-            ccache-${{ runner.os }}-ReSukiSU-SUSFS
+            ccache-${{ runner.os }}-KSUNext-SUSFS
 
-            ccache-${{ runner.os }}-ReSukiSU-SUSFS
+            ccache-${{ runner.os }}-KSUNext-SUSFS
             
       - name: 💾 Restore ccache (Without SUSFS) | 恢复ccache缓存 (Without SUSFS)
         if: ${{ github.event.inputs.SUSFS == 'Off' }}
         uses: actions/cache@v3
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ runner.os }}-${{ github.ref }}-ReSukiSU-NoSUSFS
+          key: ccache-${{ runner.os }}-${{ github.ref }}-KSUNext-NoSUSFS
           restore-keys: >
-            ccache-${{ runner.os }}-ReSukiSU-NoSUSFS
+            ccache-${{ runner.os }}-KSUNext-NoSUSFS
 
-            ccache-${{ runner.os }}-ReSukiSU-NoSUSFS
+            ccache-${{ runner.os }}-KSUNext-NoSUSFS
             
       - name: ⚙️ Initialize ccache | 初始化ccache
         run: |
@@ -222,65 +214,56 @@ jobs:
 
           bash setup.sh     
               
-      - name: ⚡ Setup ReSukiSU | 配置 ReSukiSU
+      - name: "⚡ Setup KernelSU Next | 配置 KernelSU Next"
         run: |
           cd kernel_workspace/kernel_platform
-
           # 下载并执行设置脚本
-          echo "🛠️ 正在设置ReSukiSU..."
-          curl -LSs "https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/main/kernel/setup.sh" | bash -s main
+          echo "🛠️ 正在设置KernelSU Next..."
+          curl -LSs "https://raw.githubusercontent.com/pershoot/KernelSU-Next/dev-susfs/kernel/setup.sh" | bash -s dev-susfs
 
-          cd KernelSU
+          cd KernelSU-Next
+          KSU_VERSION=$(expr $(curl -sI "https://api.github.com/repos/KernelSU-Next/KernelSU-Next/commits?sha=dev&per_page=1" | grep -i "link:" | sed -n 's/.*page=\([0-9]*\)>; rel="last".*/\1/p') "+" 30000)
+          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
+          sed -i "s/DKSU_VERSION=11998/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
 
-          if [ "${{ github.event.inputs.resukisu_multimanager }}" == "On" ]; then
+          if [ "${{ github.event.inputs.ksunext_multimanager }}" == "On" ]; then
                echo "📦 正在启用multimanager支持..."
-               curl -L "https://raw.githubusercontent.com/mrcxlinux/kernel_patches/refs/heads/main/sukisu/resukisu_multimanager.patch" -o "resukisu_multimanager.patch"
-               patch -p1 < resukisu_multimanager.patch
+               curl -L "https://raw.githubusercontent.com/mrcxlinux/kernel_patches/refs/heads/main/ksun/kernelsu-next_multimanager.patch" -o "kernelsu-next_multimanager.patch"
+               patch -p1 < kernelsu-next_multimanager.patch
           fi
 
-          KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 30700)
+          echo "✅ KernelSU Next 配置完成"
 
-          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
-
-          echo "✅ ReSukiSU 配置完成"
-         
-      - name: 🔧 Setup Patches | 配置补丁
+      - name: "🔧 Setup Patches | 配置补丁"
         run: |
           cd kernel_workspace
 
-          echo "⬇️ 克隆所需补丁..."
-
+          echo "⬇️ 下载所需补丁..."
           if [ "${{ github.event.inputs.SUSFS }}" == "On" ]; then          
             git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android15-6.6
           fi
-
           git clone https://github.com/mrcxlinux/kernel_patches.git
           git clone https://github.com/ShirkNeko/SukiSU_patch.git
 
           cd kernel_platform
-
           echo "📝 复制补丁文件..."
-
           if [ "${{ github.event.inputs.SUSFS }}" == "On" ]; then
             cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-android15-6.6.patch ./common/
             cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
             cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
           else
-            cp ../kernel_patches/sukisu/scope_min_manual_hooks_v1.9.patch ./common/
+            cp ../kernel_patches/susfs/scope_min_manual_hooks_v1.9.patch ./common/
           fi
 
           cp ../kernel_patches/zram/001-lz4.patch ./common/
-
           cp ../kernel_patches/zram/lz4armv8.S ./common/lib
-
           cp ../kernel_patches/zram/002-zstd.patch ./common/
-
-          cp ../kernel_patches/common/EnablePOLLY.patch ./common/
-
+          
           if [ "${{ github.event.inputs.UNICODE_BYPASS }}" = "On" ]; then
             cp ../kernel_patches/common/unicode_bypass_fix_6.1+.patch ./common/unicode_bypass_fix.patch
           fi
-
+          
+          echo "🔧 应用补丁..."
           cd ./common
 
           if [ "${{ github.event.inputs.UNICODE_BYPASS }}" = "On" ]; then
@@ -290,18 +273,21 @@ jobs:
 
           echo "📦 应用lz4补丁..."
           git apply -p1 < 001-lz4.patch || true
-          
-          echo "📦 正在启用POLLY支持..."
-          git apply -p1 < EnablePOLLY.patch || true
 
-          if [ "${{ github.event.inputs.SUSFS }}" == "On" ]; then
+          if [ "${{ github.event.inputs.SUSFS }}" == "On" ]; then 
             echo "📦 应用SUSFS补丁..."
             patch -p1 < 50_add_susfs_in_gki-android15-6.6.patch || true
+            cp ../../kernel_patches/69_hide_stuff.patch ./
+            patch -p1 -F 3 < 69_hide_stuff.patch
           else
             echo "📦 应用MANUAL_HOOK补丁..."
-            patch -p1 -F 3 < scope_min_manual_hooks_v1.9.patch
+            patch -p1 --fuzz=3 < scope_min_manual_hooks_v1.9.patch
           fi
 
+          echo "📦 设置 POLLY..."
+          cp ../../kernel_patches/common/EnablePOLLY.patch ./
+          patch -p1 -F 3 < EnablePOLLY.patch
+          
           echo "✅ 所有补丁应用完成"
 
       - name: ⚙️ Configure Kernel Options | 配置内核选项
@@ -309,18 +295,13 @@ jobs:
           cd kernel_workspace/kernel_platform
 
           echo "⚙️ 正在配置内核编译选项..."
+
           DEFCONFIG_PATH="$GITHUB_WORKSPACE/kernel_workspace/kernel_platform/common/arch/arm64/configs/gki_defconfig"
 
+          # Add KSU configuration settings
           echo "📦 启用 KSU 支持..."
-          echo "CONFIG_KSU=y" >> "$DEFCONFIG_PATH"
-          echo "CONFIG_KSU_FULL_NAME_FORMAT=\"%TAG_NAME%-%COMMIT_SHA%@chenhua13\"" >> "$DEFCONFIG_PATH"
-          echo "CONFIG_KSU_MULTI_MANAGER_SUPPORT=y" >> "$DEFCONFIG_PATH"
-
-          if [ "${{ github.event.inputs.KPM }}" == "On" ]; then
-            echo "📦 启用 KPM..."
-            echo "CONFIG_KPM=y" >> ./common/arch/arm64/configs/gki_defconfig
-          fi
-
+          echo "CONFIG_KSU=y" >> ./common/arch/arm64/configs/gki_defconfig  
+            
           if [ "${{ github.event.inputs.SUSFS }}" == "On" ]; then
             echo "📦 启用 SUSFS 功能..."
             echo "CONFIG_KSU_SUSFS=y" >> ./common/arch/arm64/configs/gki_defconfig
@@ -342,6 +323,7 @@ jobs:
           echo "📦 添加对 Mountify (backslashxx/mountify) 模块的支持"
           echo "CONFIG_TMPFS_XATTR=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_TMPFS_POSIX_ACL=y" >> ./common/arch/arm64/configs/gki_defconfig
+
 
           if [ "${{ github.event.inputs.bbg }}" == "On" ]; then
             echo "⚡ 配置 BBG 中..."
@@ -406,7 +388,7 @@ jobs:
             echo "📦 正在设置 Re-Kernel..."
             echo "CONFIG_REKERNEL=y" >> ./common/arch/arm64/configs/gki_defconfig
           fi
-          
+
           #跳过将uapi标准头安装到 usr/include 目录的不必要操作，节省编译时间
           echo "CONFIG_HEADERS_INSTALL=n" >> ./common/arch/arm64/configs/gki_defconfig
 
@@ -540,27 +522,12 @@ jobs:
             cp "$image_path" ./AnyKernel3/Image
             cp "$image_path" kernel_workspace/kernel_platform/out/Final-Image-Find/Image
           fi
-          
-      - name: 🧩 Patch Kernel Image (KPM) | KPM修补镜像
-        if: ${{ github.event.inputs.KPM == 'On' }}
-        run: |
-          echo "🔧 正在应用KPM补丁..."
-          cd kernel_workspace/kernel_platform/out/Final-Image-Find
-          curl -LO https://github.com/SukiSU-Ultra/SukiSU_KernelPatch_patch/releases/download/0.13.0/patch_linux
-          chmod +x patch_linux
-          ./patch_linux
-          
-          rm -f Image
-          mv oImage Image
-          cp Image $GITHUB_WORKSPACE/AnyKernel3/Image
 
-          echo "✅ KPM补丁应用完成"
-          
       - name: 🧠 Set Artifact Name | 设置产物名称
         id: set_name
         run: |
-          BASE_NAME="ReSukiSU_lz4_${{ env.KSUVER }}"
-
+          BASE_NAME="KSUNext_Ultra_lz4_${{ env.KSUVER }}"
+          
           if [ "${{ github.event.inputs.SUSFS }}" = "On" ]; then
             FINAL_NAME="${BASE_NAME}_SUSFS"
           else
