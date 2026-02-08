@@ -16,6 +16,14 @@ on:
           - "On"
           - "Off"
         default: "Off"
+      ksunext_multimanager:
+        description: 👥 Multimanager support（weishu KSU、5ec1cff KSU、rsuntk KSU、SukiSU Ultra, ReSukiSU, kowsu, MamboSU, WildKSU）
+        required: true
+        type: choice
+        options:
+          - "On"
+          - "Off"
+        default: "On"
       bbg:
         description: "🛡️ BBG baseband protection"
         required: true
@@ -218,6 +226,12 @@ jobs:
           KSU_VERSION=$(expr $(curl -sI "https://api.github.com/repos/KernelSU-Next/KernelSU-Next/commits?sha=dev&per_page=1" | grep -i "link:" | sed -n 's/.*page=\([0-9]*\)>; rel="last".*/\1/p') "+" 30000)
           echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
           sed -i "s/DKSU_VERSION=11998/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
+
+          if [ "${{ github.event.inputs.ksunext_multimanager }}" == "On" ]; then
+               echo "📦 正在启用multimanager支持..."
+               curl -L "https://raw.githubusercontent.com/mrcxlinux/kernel_patches/refs/heads/main/ksun/kernelsu-next_multimanager.patch" -o "kernelsu-next_multimanager.patch"
+               patch -p1 < kernelsu-next_multimanager.patch
+          fi
 
           echo "✅ KernelSU Next 配置完成"
 
