@@ -439,7 +439,7 @@ jobs:
 
           cd ./common
 
-          cp ../kernel_patches/common/EnablePOLLY.patch ./common/
+          cp ../kernel_patches/common/EnablePOLLY.patch ./
 
           echo "📦 正在启用POLLY支持..."
           git apply -p1 < EnablePOLLY.patch || true
@@ -982,7 +982,7 @@ jobs:
           name: ${{ steps.create_zip.outputs.ak3name }}
           path: ${{ github.workspace }}/kernel_workspace/AnyKernel*.zip
 
-      - name: 发送电报通知
+      - name: 🚶‍♂️ Send Telegram Notification | 发送电报通知
         if: inputs.telegram_notify && always()
         env:
           TELEGRAPH_TOKEN: ${{ secrets.TELEGRAPH_TOKEN }}
