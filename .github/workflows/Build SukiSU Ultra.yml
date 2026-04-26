@@ -203,7 +203,7 @@ jobs:
       - name: Configure CCache Directory
         run: |
           echo "CCACHE_DIR=$HOME/.ccache_6.6.127" >> $GITHUB_ENV
-          echo "CCACHE_MAXSIZE=3G" >> $GITHUB_ENV
+          echo "CCACHE_MAXSIZE=10G" >> $GITHUB_ENV
           echo "Current Disk Space:"
           df -h
           echo "Current Build Kernel Version: 6.6.127"
@@ -249,6 +249,7 @@ jobs:
           export CCACHE_HARDLINK="true"
           export CCACHE_DIR="${{ env.CCACHE_DIR }}"
           export CCACHE_MAXSIZE="${{ env.CCACHE_MAXSIZE }}"
+          export CCACHE_SLOPPINESS="file_macro,time_macros,include_file_mtime,pch_defines"
           
           mkdir -p "$CCACHE_DIR"
           
