@@ -137,12 +137,12 @@ on:
         description: 'Enable IP_SET + IPv6 NAT (advanced firewall + IPv6 masquerade)'
         required: true
         type: boolean
-        default: true
+        default: false
       ttl_enable:
         description: 'Enable TTL/HL Target (hide tethering from carrier detection)'
         required: true
         type: boolean
-        default: true
+        default: false
       mem_opt_patches:
         description: 'Enable memory/scheduler optimization patches (from WildKernels)'
         required: true
