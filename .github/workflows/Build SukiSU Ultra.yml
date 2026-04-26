@@ -1144,8 +1144,8 @@ jobs:
       - name: Send Telegram Notification (Failure)
         if: failure()
         env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ vars.CHAT_ID }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           DATE=$(date +"%Y-%m-%d %H:%M:%S %Z")
           REPO_URL="https://github.com/${{ github.repository }}"
@@ -1162,7 +1162,7 @@ jobs:
               -F caption="$CAPTION" \
               -F parse_mode="HTML"
           else
-            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
               -d chat_id="$TELEGRAM_CHAT_ID" \
               -d text="$CAPTION" \
               -d parse_mode="HTML"
