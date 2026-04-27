@@ -200,6 +200,20 @@ jobs:
             sed -i '$i res=$(echo "$res" | sed '\''s/-dirty//g'\'')' "$f"
           done
 
+      - name: Build & Install ccache-ECS
+        run: |
+          sudo apt-get install -y --no-install-recommends cmake
+          git clone --depth=1 https://github.com/cctv18/ccache-ECS.git /tmp/ccache-ecs
+          cd /tmp/ccache-ecs
+          # Без CMAKE_GENERATOR — использует make, ninja не нужен
+          # DEPS=DOWNLOAD внутри build-binary — cmake сам скачивает zstd/hiredis
+          ./ci/build-binary
+          sudo cp install/ccache /usr/local/bin/ccache
+          sudo chmod 755 /usr/local/bin/ccache
+          # /usr/local/bin приоритетнее /usr/lib/ccache в PATH
+          echo "/usr/local/bin" >> $GITHUB_PATH
+          echo "✅ ECS ccache: $(/usr/local/bin/ccache --version | head -1)"
+
       - name: Configure CCache Directory
         run: |
           echo "CCACHE_DIR=$HOME/.ccache_6.6.127" >> $GITHUB_ENV
@@ -857,6 +871,7 @@ jobs:
 
           export CCACHE_DIR="${{ env.CCACHE_DIR }}"
           export CCACHE_LOGFILE="${{ github.workspace }}/kernel_workspace/ccache.log"
+          export CCACHE_IS_KERNEL_COMPILING=true
           # All other ccache settings are in ccache.conf from the init step
 
           cd kernel_workspace/common
