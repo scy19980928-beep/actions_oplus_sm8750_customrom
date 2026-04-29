@@ -24,37 +24,28 @@
 
 ### 📝 Features
 
-➜ ccache (builds after initial one will be much faster!)
-
-➜ **fengchi** support
-
-➜ **mountify** support
-
-➜ baseband guard
-
-➜ BetterNET
-
-➜ **KPM** support `(SukiSU Ultra & ReSukiSU)`
-
-➜ **lz4** and **zstd** patches
-
-➜ ZRAM Configuration **module**
-
-➜ **ADIOS I/O Scheduler** & **Re:Kernel**
-
-➜ **custom** kernel suffix (by default, mimicks **stock** identification)
-
-➜ **custom** kernel build date (by default, mimicks **stock** identification)
-
-➜ multimanager support (ReSukiSU & KernelSU Next only!): `Official KSU, 5ec1cff KSU, rsuntk KSU, KowSU, MamboSU, KernelSU NEXT, WildKSU`
-
-➜ Unicode Bypass (you can use an **LSPosed module** to fix this painlessly)
-
-➜ And more features.. (Read latest GitHub Release)
+➜ **SuSFS** Support
+➜ **NTSync** Support
+➜ **Droidspaces** Support
+➜ **IP_SET + IPv6 NAT** Patches
+➜ **TTL Target** Patches
+➜ **Memory Opt** Patches
+➜ **Multi-Manager Support** for SukiSU Ultra / ReSukiSU
+➜ **KPM** Support for SukiSU Ultra / ReSukiSU
+➜ **LZ4** Patches
+➜ **LZ4KD** Patches
+➜ **BBR/Brutal** Patches
+➜ **ADIOS IO** Pathces
+➜ **Baseband Guard**
+➜ **Fengchi** Optimization
+➜ **Unicode Fix** Patches
+➜ **WireGuard VPN** Kernel level Support
+➜ **LRNG v59** Patches
+➜ **Wakelock Blocker** Patches
 
 ### 🤖 Compiler changes
 
-➜ ZyC   Clang
+➜ ZyC Clang
 
 ➜ Merge assembler with compiler
 
@@ -82,7 +73,7 @@
 
 ---
 ### Credits ⸜(｡˃ ᵕ ˂ )⸝♡
-[Xiaomichael](https://github.com/xiaomichael) | [cctv18](https://github.com/cctv18) | [vc-teahouse](https://github.com/vc-teahouse) | [Numbersf](https://github.com/Numbersf)
+[Xiaomichael](https://github.com/xiaomichael) | [cctv18](https://github.com/cctv18) | [vc-teahouse](https://github.com/vc-teahouse) | [Numbersf](https://github.com/Numbersf) | [WildKernels](https://github.com/WildKernels)
 
 ---
 
