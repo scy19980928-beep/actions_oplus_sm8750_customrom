@@ -98,5 +98,3 @@
 ---
 
 <p align="center">🌟 please star this project! it would help a lot!</p>
-
-<p align="center">💴 I do <em><strong>NOT</strong></em> accept donations!</p>
