@@ -957,7 +957,7 @@ jobs:
           path: ${{ env.CCACHE_DIR }}
           key: ${{ env.CCACHE_KEY }}-${{ runner.os }}-${{ github.ref_name }}-${{ github.run_id }}
 
-      - name: 📦 Save LTO Cache
+      - name: 📦 Save LTO CCache
         if: success() && inputs.lto_type == 'thin'
         uses: actions/cache/save@v4
         with:
