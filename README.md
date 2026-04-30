@@ -149,7 +149,7 @@ This CI pipeline includes:
 - 📦 **Pre-downloaded toolchain** via aria2c with 16 connections
 - 🗑️ **Background cleanup** of unused GitHub runner packages
 
-### Build Time Expectations
+### Build Time Expectations with CCache
 | Configuration | Estimated Time |
 |--------------|----------------|
 | `lto_type: none` + minimal patches | ~3:20-3:50 |
