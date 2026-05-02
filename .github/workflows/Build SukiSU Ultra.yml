@@ -187,8 +187,8 @@ jobs:
           cd kernel_workspace
 
           # apt — stripped to bare minimum, no purge/man-db waste
-          sudo apt-get install -y --no-install-recommends \
-            binutils python-is-python3 libssl-dev libelf-dev aria2 dos2unix &
+          sudo apt-get install -y --no-install-recommends -o Dpkg::Use-Pty=0 \
+            libelf-dev dos2unix pahole cmake &
 
           # Source clone
           echo "Cloning source repository..."
