@@ -457,6 +457,23 @@ jobs:
 
           echo "✅ Base patches applied"
 
+      - name: 🚑 Fix SukiSU-Ultra Compile Errors
+        working-directory: kernel_workspace/common
+        run: |
+          echo "Injecting missing binfmts.h header into SukiSU-Ultra..."
+          
+          # Fix adb_root.h missing struct user_arg_ptr
+          if [ -f "drivers/kernelsu/feature/adb_root.h" ]; then
+            sed -i '1i #include <linux/binfmts.h>' drivers/kernelsu/feature/adb_root.h
+            echo "✅ Fixed adb_root.h"
+          fi
+          
+          # Pre-emptively fix event.c in case it needs sched.h for task_struct
+          if [ -f "drivers/kernelsu/sulog/event.c" ]; then
+            sed -i '1i #include <linux/sched.h>\n#include <linux/binfmts.h>' drivers/kernelsu/sulog/event.c
+            echo "✅ Patched event.c"
+          fi
+
       - name: ⚙️ Configure Kernel Options
         run: |
           cd kernel_workspace
@@ -979,14 +996,14 @@ jobs:
           df -h
 
       - name: 📦 Save New CCache
-        if: always()
+        if: success()
         uses: actions/cache/save@v4
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ${{ env.CCACHE_KEY }}-${{ runner.os }}-${{ github.ref_name }}-${{ github.run_id }}
 
       - name: 📦 Save LTO CCache
-        if: always() && inputs.lto_type == 'thin'
+        if: success() && inputs.lto_type == 'thin'
         uses: actions/cache/save@v4
         with:
           path: ${{ env.LDCACHE_DIR }}
