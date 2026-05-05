@@ -979,14 +979,14 @@ jobs:
           df -h
 
       - name: 📦 Save New CCache
-        if: success()
+        if: always()
         uses: actions/cache/save@v4
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ${{ env.CCACHE_KEY }}-${{ runner.os }}-${{ github.ref_name }}-${{ github.run_id }}
 
       - name: 📦 Save LTO CCache
-        if: success() && inputs.lto_type == 'thin'
+        if: always() && inputs.lto_type == 'thin'
         uses: actions/cache/save@v4
         with:
           path: ${{ env.LDCACHE_DIR }}
