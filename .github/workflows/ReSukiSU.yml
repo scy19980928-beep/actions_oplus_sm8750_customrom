@@ -346,7 +346,7 @@ jobs:
           cd KernelSU
           
           KSU_VERSION_COUNT=$(git rev-list --count HEAD)
-          export KSUVER=$(expr $KSU_VERSION_COUNT + 37185)
+          export KSUVER=$(expr $KSU_VERSION_COUNT + 30700)
           echo "KSUVER=$KSUVER" >> $GITHUB_ENV
 
           KBUILD_FILE="kernel/Makefile"
