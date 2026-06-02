@@ -387,6 +387,11 @@ jobs:
         run: |
           SERVICES="security/selinux/ss/services.c"
           RULES="KernelSU/kernel/selinux/rules.c"
+          
+        if grep -q "^int security_context_to_sid_with_policy" "$SERVICES"; then
+          echo "✅ Kernel already has _with_policy functions, skipping addition"
+        else
+          echo "⚠️ Kernel missing _with_policy functions, adding them..."
   
           # ── 1. Define backup_sepolicy in rules.c after "#define ALL NULL" ──
           sed -i '/^#define ALL NULL/a\\n#ifdef CONFIG_KSU_SUSFS\nstruct selinux_policy *backup_sepolicy;\n#endif' "$RULES"
