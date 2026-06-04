@@ -1270,7 +1270,6 @@ jobs:
           - **Multi-Manager:** true
           - **KPM:** ${{ github.event.inputs.KPM }}
           - **LZ4:** ${{ github.event.inputs.lz4_enable }}
-          - **LZ4KD:** ${{ github.event.inputs.lz4kd_enable }}
           - **ZRAM Writeback:** ${{ github.event.inputs.zram_writeback }}
           - **SchedUil Optimizations:** ${{ github.event.inputs.schedutil_opt }}
           - **BBR/Brutal:** ${{ github.event.inputs.bbr_enable }}
@@ -1280,7 +1279,6 @@ jobs:
           - **Oryon CPU Optimizations:** ${{ github.event.inputs.cpu_opt }}
           - **Unicode Fix:** ${{ github.event.inputs.unicode_fix }}
           - **WireGuard:** ${{ github.event.inputs.wireguard }}
-          - **LRNG v59:** ${{ github.event.inputs.lrng_enable }}
           - **Wakelock Blocker:** ${{ github.event.inputs.wakelock_blocker }}
           EOF
 
