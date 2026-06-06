@@ -57,7 +57,6 @@
 
 ### 💾 Storage & Memory
 - ✅ **LZ4 1.10.0 + ZSTD 1.5.7** – Faster compression for ZRAM
-- ✅ **LZ4KD** – Kernel-level ZRAM optimization *(optional)*
 - ✅ **ZRAM Writeback** – Better memory management *(optional)*
 - ✅ **F2FS Optimizations** – Enhanced flash storage performance *(optional)*
 
