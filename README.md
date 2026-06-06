@@ -26,7 +26,7 @@
 | **Chipset** | `SM8750` \| Snapdragon 8 Elite \| sun |
 | **Kernel Version** | `Linux 6.6` (GKI Android 15) |
 | **Android Version** | `15 VanillaIceCream` (compatible with later versions) |
-| **ROM Compatibility** | **custom rom (CrDroid has been tested and works fine; other custom ROMs should work in theory—please try them yourself.**) |
+| **ROM Compatibility** | **custom rom (CrDroid has been tested and works fine; other custom roms should work in theory—please try them yourself.)** |
 | **Root Solution** | ReSukiSU / SukiSU Ultra / KSU Next (Multi-Manager) |
 | **Build System** | GitHub Actions CI/CD (optimized for ~5-6min builds) |
 
@@ -111,7 +111,7 @@
 ## 🤖 Compiler & Build Configuration
 
 ### Toolchain
-- **Clang**: ZyCromerZ Clang 19.0.0git (Oryon-optimized)
+- **Clang**: AOSP Clang-r563880c  (lineage-23.2 in android16-qpr3-release)
 - **Linker**: LLD 19 with ThinLTO cache in RAM (`/dev/shm`)
 - **CCache**: ECS-enhanced ccache with 10GB cache + aggressive sloppiness
 
@@ -132,13 +132,14 @@
 ### Quick Start
 1. **Fork** this repository (ensure all branches are copied)
 2. Go to **Actions** → Enable workflows
-3. Click **"SukiSU Ultra OP13 Build"** → **"Run workflow"**
+3. Click **"ReSukiSU OP13 Build"** → **"Run workflow"**
 4. Configure options:
    - ✅ SuSFS (recommended for hiding)
    - ✅ Fengchi (performance scheduler)
    - ✅ Memory Opt Patches (25 optimizations)
    - 🔘 LTO Type: `thin` (balanced) / `none` (fastest compile) / `full` (max optimization)
-   - 🔘 Optional features: KPM, LZ4KD, NTSync, IPv6 NAT, etc.
+   - 🔘 Optional features: ∼∼KPM∼∼, NTSync, IPv6 NAT, etc.
+  (⚠️ Warning: After flashing the KPM patch, the device may get stuck on the boot animation. Please do not power it on; wait for a future fix.)
 5. Click **"Run workflow"** → Wait ~4-5 minutes
 6. Download `AnyKernel3_*.zip` from artifacts or Telegram
 
