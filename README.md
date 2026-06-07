@@ -51,7 +51,6 @@
 ### 🌐 Networking
 - ✅ **TCP BBR + Brutal** – Modern congestion control algorithms
 - ✅ **WireGuard** – Kernel-level VPN support
-- ✅ **Full Netfilter** – Conntrack, NAT, hashlimit *(optional)*
 - ✅ **IP_SET + IPv6 NAT** – Advanced firewall + IPv6 masquerade *(optional)*
 - ✅ **TTL/HL Target** – Hide tethering from carrier detection *(optional)*
 
