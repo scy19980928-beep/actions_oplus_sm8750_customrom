@@ -1266,13 +1266,13 @@ jobs:
 
       - name: Set Environment Variables
         run: |
-          FULL_VERSION=6.6.139-palaziks-ShiftPorts
+          FULL_VERSION=${{ env.KSUVER }}-6.6.139-palaziks-ShiftPorts
           echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
           TIME="$(TZ='Asia/Shanghai' date +'%y%m%d%H%M%S')"
           TIME_FORM="$(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M:%S')"
           echo "TIME=$TIME" >> $GITHUB_ENV
           echo "TIME_FORM=$TIME_FORM" >> $GITHUB_ENV
-          TAG_HEAD="OPPO-OPlus-Realme-build"
+          TAG_HEAD="OPlus SukiSU Ultra SM8750 CustomRom-KernelBuild(Compiling AOSP-Clang)"
           echo "TAG_HEAD=$TAG_HEAD" >> $GITHUB_ENV
           KSU_TYPENAME="SukiSU Ultra"
           echo "KSU_TYPENAME=$KSU_TYPENAME" >> $GITHUB_ENV
@@ -1284,7 +1284,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cat << 'EOF' > release_notes.md
-          ### 📱 OnePlus 13 SukiSU Ultra SM8750 CustomRom-KernelBuild (Compiling AOSP-Clang)
           - **Kernel Version:** ${{ env.FULL_VERSION }}
           - **Build Time:** ${{ env.TIME_FORM }}
           - **KSU Branch:** SukiSU Ultra
