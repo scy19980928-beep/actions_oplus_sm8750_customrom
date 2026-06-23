@@ -19,21 +19,11 @@ on:
         required: true
         type: boolean
         default: true
-      KPM:
-        description: 'Enable KPM'
-        required: true
-        type: boolean
-        default: false
       lz4_enable:
         description: 'Install LZ4 1.10.0 + ZSTD 1.5.7 Patch'
         required: true
         type: boolean
         default: true
-      lz4kd_enable:
-        description: 'Install LZ4KD Patch (ZRAM optimization)'
-        required: true
-        type: boolean
-        default: false
       bbr_enable:
         description: "Enable TCP BBR/Brutal (false=off, true=add, default=set as default)"
         required: true
@@ -102,16 +92,6 @@ on:
         required: true
         type: boolean
         default: true
-      netfilter_full:
-        description: 'Full Netfilter (conntrack, NAT, hashlimit)'
-        required: true
-        type: boolean
-        default: false
-      lrng_enable:
-        description: 'Enable LRNG v59 (better entropy for crypto/gaming)'
-        required: true
-        type: boolean
-        default: false
       wakelock_blocker:
         description: 'Enable Wakelock Blocker (better idle battery drain)'
         required: true
@@ -408,19 +388,6 @@ jobs:
           echo "CONFIG_KSU=y" >> "$DEFCONFIG"
           echo "CONFIG_TMPFS_XATTR=y" >> "$DEFCONFIG"
           echo "CONFIG_TMPFS_POSIX_ACL=y" >> "$DEFCONFIG"
-      
-          if [[ "${{ github.event.inputs.lz4kd_enable }}" == "true" ]]; then
-            echo "CONFIG_ZSMALLOC=y" >> "$DEFCONFIG"
-            echo "CONFIG_CRYPTO_LZ4HC=y" >> "$DEFCONFIG"
-            echo "CONFIG_CRYPTO_LZ4K=y" >> "$DEFCONFIG"
-            echo "CONFIG_CRYPTO_LZ4KD=y" >> "$DEFCONFIG"
-            echo "CONFIG_CRYPTO_842=y" >> "$DEFCONFIG"
-          fi
-      
-          if [ "${{ github.event.inputs.KPM }}" == "true" ]; then
-            echo "📦 Enabling KPM..."
-            echo "CONFIG_KPM=y" >> "$DEFCONFIG"
-          fi
       
           echo "CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y" >> "$DEFCONFIG"
           sed -i 's/check_defconfig//' ./common/build.config.gki
